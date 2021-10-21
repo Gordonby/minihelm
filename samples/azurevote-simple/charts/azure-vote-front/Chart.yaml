@@ -1,0 +1,6 @@
+apiVersion: v2
+name: azure-vote-front
+description: The frontend of the Azure Voting App
+type: application
+version: 0.1.0 #chart version
+appVersion: "v1" #your app version (used as an image tag)

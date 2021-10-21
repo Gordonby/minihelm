@@ -1,18 +1,23 @@
-replicaCount: 1
+replicaCount: 2
 
 nameOverride: ""
+fullnameOverride: ""
+
+env:
+  redis: "azure-vote-back"
 
 image:
-  repository: nginx
+  repository: mcr.microsoft.com/azuredocs/azure-vote-front
   pullPolicy: IfNotPresent #Always
   tag: "" #image tag should be set in Chart.yaml - but where it's a strange tag, just override here
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
+  azureLbInternal: "false"
 
 serviceAccount:
-  create: true
+  create: false
   annotations: {}
   name: "" #Leave empty and it'll default to the name of the app, thanks to the _helpers.tpl
 

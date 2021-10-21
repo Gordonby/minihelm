@@ -1,0 +1,11 @@
+azure-vote-front:
+  replicaCount: 3
+  fullnameOverride: "azure-vote-front"
+  env:
+    redis: "azure-vote-back"
+  service:
+    azureLbInternal: "false"
+
+azure-vote-back:
+  replicaCount: 1
+  fullnameOverride: "azure-vote-back"

@@ -17,6 +17,6 @@ Until i write a binary to do some of this.. Follow the following process
 
 A few different packaged helm charts that i've done.
 
-1. ExternalDNS - as used by https://github.com/Azure/Aks-Construction
-1. Azure Vote - the classic AKS voting app. `networking policy` `load balancer` `no ingress`
-1. Certmanager - a Cert Manager ClusterIssuer config
+1. ExternalDNS - as used by https://github.com/Azure/Aks-Construction `service account` `cluster role` `cluster role binding`
+1. Azure Vote - the classic AKS voting app. `multi-container deployment` `networking policies` `load balancer` `no ingress`
+1. Certmanager - a Cert Manager ClusterIssuer config `cluster issuer`

@@ -1,3 +1,4 @@
 email: "test@test.com"
 ingressClass: azure/application-gateway
-stagingOrProd: "staging"
+staging: true
+prod : true

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openjdk-demo
+  labels:
+    app: openjdk-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openjdk-demo
+  template:
+    metadata:
+      labels:
+        app: openjdk-demo
+    spec:
+      volumes:
+        - name: openjdk-demo-cert-mount
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-{{ .Values.csisecrets.vaultname }}"
+      containers:
+        - name: openjdk-demo
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          env:
+            - name: SSL_ENABLED
+              value: "true"
+            - name: SSL_STORE
+              value: "/cert/identity.p12"
+            - name: KEY_STORE_PASSWD
+              value: ""
+          volumeMounts:
+            - name: openjdk-demo-cert-mount
+              mountPath: "/cert"
+              readOnly: true
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"

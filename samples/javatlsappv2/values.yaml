@@ -7,6 +7,7 @@ dnsname: openjdk-demo.local
 appgw:
   rootCertificateName: "openjdk-demo-service"
   frontendCertificateName: "mykvsslcert"
+  privateIP: "true"
 
 csisecrets:
   vaultname: ""

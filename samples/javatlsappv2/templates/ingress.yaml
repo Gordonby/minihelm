@@ -13,10 +13,6 @@ metadata:
     appgw.ingress.kubernetes.io/appgw-trusted-root-certificate: {{ .Values.appgw.rootCertificateName }}
     appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.appgw.frontendCertificateName }}
 spec:
-  tls:
-    - hosts:
-        - {{ .Values.dnsname }}
-      secretName: tls-secret
   rules:
     - host: {{ .Values.dnsname }}
       http:

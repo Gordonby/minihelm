@@ -6,13 +6,16 @@ metadata:
     app: openjdk-demo
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/use-private-ip: "false"
+    appgw.ingress.kubernetes.io/use-private-ip: "{{ .Values.appgw.usePrivateIp }}"
     appgw.ingress.kubernetes.io/ssl-redirect: "true"
     appgw.ingress.kubernetes.io/backend-protocol: "https"
-    appgw.ingress.kubernetes.io/backend-hostname: "openjdk-demo-service"
+    appgw.ingress.kubernetes.io/backend-hostname: "{{ .Values.nameOverride }}-service"
     appgw.ingress.kubernetes.io/appgw-trusted-root-certificate: {{ .Values.appgw.rootCertificateName }}
     appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.appgw.frontendCertificateName }}
 spec:
+  tls:
+    - hosts:
+        - {{ .Values.dnsname }}
   rules:
     - host: {{ .Values.dnsname }}
       http:

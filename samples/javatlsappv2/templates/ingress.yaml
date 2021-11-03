@@ -1,15 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: openjdk-demo-ingress
+  name: {{ include "app.name" . }}-ingress
   labels:
-    app: openjdk-demo
+    app: {{ include "app.name" . }}
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/use-private-ip: "{{ .Values.appgw.usePrivateIp }}"
     appgw.ingress.kubernetes.io/ssl-redirect: "true"
     appgw.ingress.kubernetes.io/backend-protocol: "https"
-    appgw.ingress.kubernetes.io/backend-hostname: "{{ .Values.nameOverride }}-service"
+    appgw.ingress.kubernetes.io/backend-hostname: "{{ .Values.nameOverride }}" #Must match CN in backend cert
     appgw.ingress.kubernetes.io/appgw-trusted-root-certificate: {{ .Values.appgw.rootCertificateName }}
     appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.appgw.frontendCertificateName }}
 spec:
@@ -24,6 +24,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: openjdk-demo-service
+                name: {{ include "app.name" . }}-service
                 port:
                   name: https

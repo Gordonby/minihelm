@@ -2,10 +2,10 @@ replicaCount: 1
 
 nameOverride: "openjdk-demo"
 
-dnsname: openjdk-demo.local
+dnsname: openjdk-kvssl.local
 
 appgw:
-  rootCertificateName: "openjdk-demo-service" #AppGw is fussy about the CN matching the incoming hostheader, otherwise 502's ensue
+  rootCertificateName: "openjdk-demo" #AppGw is fussy about the CN matching the incoming hostheader, otherwise 502's ensue
   frontendCertificateName: "openjdk-kvssl-fe"
   usePrivateIp: false
 

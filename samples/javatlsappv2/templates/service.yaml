@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openjdk-demo-service
+  name: {{ include "app.name" . }}-service
   labels:
-    app: openjdk-demo
+    app: {{ include "app.name" . }}
 spec:
   selector:
-    app: openjdk-demo
+    app: {{ include "app.name" . }}
   ports:
     - name: https
       protocol: TCP

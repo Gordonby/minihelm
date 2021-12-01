@@ -1,0 +1,6 @@
+apiVersion: v2
+name: azure-vote-back
+description: The backend of the Azure Voting App
+type: application
+version: 0.1.0 #chart version
+appVersion: "6.0.8" #your app version (used as an image tag)

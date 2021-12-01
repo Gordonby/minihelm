@@ -1,10 +1,10 @@
-azure-vote-front:
+front:
   replicaCount: 3
   fullnameOverride: "azure-vote-front"
   env:
     redis: "azure-vote-back"
   service:
-    type: "ClusterIP" #LoadBalancer
+    type: "" #LoadBalancer
     azureLbInternal: "false"
 
 azure-vote-back:

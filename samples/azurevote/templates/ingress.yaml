@@ -2,10 +2,10 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "app.fullname" . }}-ing
+  name: {{ include "app.name" . | lower }}-ing
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/use-private-ip: "{{ index .Values "azure-vote-front" "service" "azureLbInternal" }}"
+    appgw.ingress.kubernetes.io/use-private-ip: "{{ .Values.ingress.appGwPrivateIp }}"
 spec:
   rules:
   - http:

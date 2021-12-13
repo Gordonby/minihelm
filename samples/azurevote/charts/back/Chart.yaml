@@ -1,5 +1,5 @@
 apiVersion: v2
-name: azure-vote-back
+name: back
 description: The backend of the Azure Voting App
 type: application
 version: 0.1.0 #chart version

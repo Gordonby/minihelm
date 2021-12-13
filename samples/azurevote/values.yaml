@@ -7,7 +7,7 @@ front:
     type: "" #LoadBalancer
     azureLbInternal: "false"
 
-azure-vote-back:
+back:
   replicaCount: 1
   fullnameOverride: "azure-vote-back"
 

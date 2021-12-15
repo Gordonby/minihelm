@@ -1,6 +1,6 @@
 front:
   replicaCount: 3
-  fullnameOverride: "azure-vote-front"
+  nameOverride: "azure-vote-front"
   env:
     redis: "azure-vote-back"
   service:
@@ -9,7 +9,7 @@ front:
 
 back:
   replicaCount: 1
-  fullnameOverride: "azure-vote-back"
+  nameOverride: "azure-vote-back"
 
 ingress:
   enabled: true

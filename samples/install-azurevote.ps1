@@ -2,6 +2,6 @@ $setparams='ingress.enabled=true, ingress.appGwPrivateIp="true", front.service.a
 
 echo $setparams
 
-helm upgrade --install azure-vote ./azurevote --set $setparams -n default --dry-run
-kubectl get po 
+helm upgrade --install azurevotey ./azurevote --set $setparams -n default --dry-run
+kubectl get po
 kubectl get svc

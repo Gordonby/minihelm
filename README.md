@@ -21,5 +21,6 @@ App | Chart Name | Description | Helm features / Notes
 --- | ---------- | ----------- | ---------------------
 ExternalDNS | ExternalDNS | As used by https://github.com/Azure/Aks-Construction | `service account` `cluster role` `cluster role binding`
 Azure Voting App | AzureVote-Simple | The classic AKS voting app. | `sub charts` `networking policies` `load balancer` `no ingress`
+Azure Voting App | AzureVote | The classic AKS voting app, with extended options for different configurations. | `sub charts` `networking policies` `load balancer` `conditional ingress`
 CertManager ClusterIssuer | Certmanager | A Cert Manager ClusterIssuer config | `cluster issuer`
-Javatlsapp | Javatllsapp | A simple java application that requires TLS communication | `csi` `keyvault` `agic`
+Javatlsapp | Javatlsapp | A simple java application that requires TLS communication | `csi` `keyvault` `agic`

@@ -1,5 +1,7 @@
-#helm install externaldns ./externaldns --dry-run --debug --set externaldns.domainfilter="test"
+$setparams='ingress.enabled=true, ingress.appGwPrivateIp="true", front.service.azureLbInternal=true, front.service.type="ClusterIP"'
 
-helm install azure-vote ./azurevote-simple -n az --create-namespace
-kubectl get po -n az
-kubectl get svc -n az
+echo $setparams
+
+helm upgrade --install azurevotey ./azurevote --set $setparams -n default --dry-run
+kubectl get po
+kubectl get svc

@@ -1,0 +1,16 @@
+front:
+  replicaCount: 3
+  nameOverride: "azure-vote-front"
+  env:
+    redis: "azure-vote-back"
+  service:
+    type: "LoadBalancer"
+    azureLbInternal: "false"
+
+back:
+  replicaCount: 1
+  nameOverride: "azure-vote-back"
+
+ingress:
+  enabled: true
+  appGwPrivateIp: false

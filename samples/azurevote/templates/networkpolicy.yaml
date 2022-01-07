@@ -18,10 +18,10 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: azure-vote-back
+      app: back
       role: backend
   ingress:
     - from:
       - podSelector:
           matchLabels:
-            app: azure-vote-front
+            app: front

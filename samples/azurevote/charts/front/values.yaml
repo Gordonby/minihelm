@@ -3,6 +3,8 @@ replicaCount: 2
 nameOverride: ""
 fullnameOverride: ""
 
+role: frontend
+
 env:
   redis: "azure-vote-back"
 

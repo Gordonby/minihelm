@@ -4,7 +4,6 @@ metadata:
   name: {{ include "app.fullname" . }}
   labels:
     {{- include "app.labels" . | nindent 4 }}
-    role: backend
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

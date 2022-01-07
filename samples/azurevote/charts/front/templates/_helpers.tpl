@@ -36,7 +36,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "app.selectorLabels" -}}
-role: frontend
+role: {{ .Values.role }}
 app: {{ include "app.name" . }}
 app.kubernetes.io/name: {{ include "app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}

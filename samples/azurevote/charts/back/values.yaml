@@ -3,6 +3,8 @@ replicaCount: 1
 nameOverride: ""
 fullnameOverride: ""
 
+role: backend
+
 image:
   repository: mcr.microsoft.com/oss/bitnami/redis
   pullPolicy: IfNotPresent #Always

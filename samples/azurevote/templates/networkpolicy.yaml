@@ -1,27 +1,35 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: web-allow-external
+  name: allow-vote-front-ingress
 spec:
   podSelector:
     matchLabels:
-      role: frontend
+      app: front
   ingress:
+  - {}
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: back
   - ports:
-    - port: 80
-    from: []
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: azure-vote-back-policy
+  name: azure-vote-back
 spec:
   podSelector:
     matchLabels:
       app: back
       role: backend
   ingress:
-    - from:
-      - podSelector:
-          matchLabels:
-            app: front
+  - from:
+    - podSelector:
+        matchLabels:
+          app: front

@@ -1,5 +1,5 @@
 front:
-  replicaCount: 3
+  replicaCount: 1
   nameOverride: "azure-vote-front"
   env:
     redis: "azure-vote-back"

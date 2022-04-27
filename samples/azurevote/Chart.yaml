@@ -2,5 +2,5 @@ apiVersion: v2
 name: AzureVote
 description: The master template for the Azure Voting App
 type: application
-version: 0.9.5 #chart version
+version: 0.9.6 #chart version
 appVersion: "1.0.1" #your app version (used as an image tag)

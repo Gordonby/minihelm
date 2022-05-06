@@ -12,15 +12,20 @@ metadata:
     appgw.ingress.kubernetes.io/request-timeout: "30"
     appgw.ingress.kubernetes.io/health-probe-unhealthy-threshold: "3"
     {{- end }}
+    {{- if eq .Values.ingress.class "traefik" }}
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    {{- end }}
 
 spec:
   rules:
   - http:
       paths:
       - pathType: ImplementationSpecific
+        path: /
         backend:
           service:
             name: {{ $.Release.Name }}-azure-vote-front
             port:
               number: 80
+
 {{- end }}

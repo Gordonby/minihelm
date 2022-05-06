@@ -13,4 +13,5 @@ back:
 
 ingress:
   enabled: true
+  class: azure/application-gateway
   appGwPrivateIp: false

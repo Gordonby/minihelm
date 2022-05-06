@@ -1,0 +1,1 @@
+helm install petapp . -n spring-petclinic --create-namespace

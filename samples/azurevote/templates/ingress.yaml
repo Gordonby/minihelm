@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ $.Release.Name }}
   annotations:
-    kubernetes.io/ingress.class: "{{ .Values.ingress.class }}"
+    #kubernetes.io/ingress.class: "{{ .Values.ingress.class }}"
     {{- if eq .Values.ingress.class "azure/application-gateway" }}
     appgw.ingress.kubernetes.io/use-private-ip: "{{ .Values.ingress.appGwPrivateIp }}"
     appgw.ingress.kubernetes.io/health-probe-timeout: "30"

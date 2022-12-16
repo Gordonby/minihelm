@@ -1,0 +1,11 @@
+nameOverride: ""
+
+nodeSelectorVmSizes:
+  - Standard_NC6 
+
+gpuDriverVersion: 510.47.03
+
+image:
+  repository: docker.io/alexeldeib/nsenter
+  pullPolicy: IfNotPresent #Always
+  tag: "static" #image tag should be set in Chart.yaml - but where it's a strange tag, just override here

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "app.fullname" . }}-script
+  labels:
+    app: nsenter
+data:
+{{ (.Files.Glob "scripts/downloadandinstall.sh").AsConfig | indent 2 }}

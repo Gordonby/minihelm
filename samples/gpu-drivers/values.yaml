@@ -1,0 +1,22 @@
+nameOverride: ""
+
+nodeSelectorVmSizes:
+  - Standard_NC6
+  - Standard_NC6_Promo
+  - Standard_NV6_Promo
+  - Standard_ND96asr_v4
+  - Standard_NC16as_T4_v3
+  - Standard_NC4as_T4_v3
+  - Standard_NC64as_T4_v3
+
+gpuDriverVersion: 515.65.01
+
+image:
+  repository: docker.io/alexeldeib/nsenter
+  pullPolicy: IfNotPresent #Always
+  tag: "static" #image tag should be set in Chart.yaml - but where it's a strange tag, just override here
+
+
+#Todo
+#driverDownloadUrl: https://us.download.nvidia.com/tesla/$GPU_DV/NVIDIA-Linux-x86_64-${GPU_DV}.run #Add Azure storage example
+#retryLimit: 2

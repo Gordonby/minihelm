@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    app: {{ include "app.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "app.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "app.fullname" . }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node.kubernetes.io/instance-type
+                operator: In
+                values:
+                {{- range .Values.nodeSelectorVmSizes }}
+                  - {{ . }}
+                {{- end }}
+              - key: nvidiaDriver
+                operator: In
+                values: 
+                - {{ .Values.gpuDriverVersion }}
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}" # requires an image with bash, curl, sleep, and nsenter (vanilla ubuntu works)
+        imagePullPolicy: Always
+        name: {{ .Chart.Name }}
+        command: ["/entrypoint.sh"]
+        args: ["downloadandinstall.sh"]
+        env:
+        - name: GPU_DV
+          value: {{ .Values.gpuDriverVersion }}
+        resources:
+          requests:
+            {}
+          limits:
+            {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: actions
+          mountPath: "/opt/actions"
+        - name: hostmount
+          mountPath: "/mnt/actions"
+        - name: usr
+          mountPath: /mnt/usr
+      volumes:
+      - name: usr
+        hostPath:
+          path: /usr
+          type: DirectoryOrCreate
+      - name: hostmount
+        hostPath:
+          path: /opt/actions
+          type: DirectoryOrCreate
+      - name: actions
+        configMap:
+          name: {{ include "app.fullname" . }}-script

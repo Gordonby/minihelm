@@ -64,4 +64,4 @@ spec:
           type: DirectoryOrCreate
       - name: actions
         configMap:
-          name: {{ include "app.name" . }}-script
+          name: {{ include "app.fullname" . }}-script

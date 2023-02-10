@@ -8,6 +8,7 @@ nodeSelectorVmSizes:
   - Standard_NC16as_T4_v3
   - Standard_NC4as_T4_v3
   - Standard_NC64as_T4_v3
+  - standard_nc4as_t4_v3
 
 gpuDriverVersion: 515.65.01
 

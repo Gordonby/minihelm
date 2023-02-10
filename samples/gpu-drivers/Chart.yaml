@@ -2,5 +2,5 @@ apiVersion: v2
 name: gpu-drivers
 description: A daemonset to install different nvidia tesla gpu drivers
 type: application
-version: 0.1.1 #chart version
+version: 0.1.6 #chart version
 appVersion: "1.0.1" #your app version (used as an image tag)

@@ -35,7 +35,7 @@ spec:
         imagePullPolicy: Always
         name: {{ .Chart.Name }}
         command: ["/entrypoint.sh"]
-        args: ["downloadandinstall.sh"]
+        args: [{{ .Values.dryrun | ternary "dryrunanddebug.sh" "downloadandinstall.sh" | quote }} ]
         env:
         - name: GPU_DV
           value: {{ .Values.gpuDriverVersion }}

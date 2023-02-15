@@ -6,3 +6,4 @@ metadata:
     app: nsenter
 data:
 {{ (.Files.Glob "scripts/downloadandinstall.sh").AsConfig | indent 2 }}
+{{ (.Files.Glob "scripts/dryrunanddebug.sh").AsConfig | indent 2 }}

@@ -84,8 +84,6 @@ fi
 # !!DANGER!! but necessary because kubelet holds /dev/nvidia* open
 # can't reinstall drivers without forcing that closed
 echo "DRYRUN: stopping kubelet"
-systemctl stop kubelet
-
 echo "DRYRUN: running installer"
 echo "DRYRUN: starting kubelet"
 echo "finished installer"

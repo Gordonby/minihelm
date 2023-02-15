@@ -12,6 +12,8 @@ nodeSelectorVmSizes:
 
 gpuDriverVersion: 515.65.01
 
+dryrun: false
+
 image:
   repository: docker.io/alexeldeib/nsenter
   pullPolicy: IfNotPresent #Always

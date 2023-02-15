@@ -9,6 +9,8 @@ set -x
 
 echo "Script for NVIDIA driver install $GPU_DV"
 
+echo "---------------DRY RUN----------------------"
+
 echo "w debugging"
 systemctl --version
 ps -aux | grep nvidia-device-plugin

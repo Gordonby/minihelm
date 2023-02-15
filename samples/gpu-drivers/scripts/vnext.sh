@@ -9,43 +9,11 @@ set -x
 
 echo "Script for NVIDIA driver install $GPU_DV"
 
-open_devices="$(lsof /dev/nvidia* 2>/dev/null)"
-nvidia_modprobe_active="$(systemctl is-active nvidia-modprobe)"
-nvidia_device_plugin_active="$(systemctl is-active nvidia-device-plugin)"
-
-echo "Open devices: $open_devices"
-echo "nvidia-modprobe active: $nvidia_modprobe_active" #The nvidia-modprobe utility is used by user-space NVIDIA driver components to make sure the NVIDIA kernel module is loaded
-echo "nvidia-device-plugin active: $nvidia_device_plugin_active" #The NVIDIA device plugin for Kubernetes
-
-if [ -n "$open_devices" ]; then
-    if [ "$nvidia_modprobe_active" == "active" ]; then
-    echo "Stopping nvidia-modprobe"
-    systemctl stop nvidia-modprobe
-    fi
-    if [ "$nvidia_device_plugin_active" == "active" ]; then
-    echo "Stopping nvidia-device-plugin"
-    systemctl stop nvidia-device-plugin
-    fi
-fi
-
-echo "Searching for nvidia device plugin processes"
-PROCMATCHES=$(ps -aux | grep nvidia-device-plugin | grep -v grep -c)
-
-if [ $PROCMATCHES == 1 ]; then
-    echo "kill it"
-    NVP=$(ps -aux | grep 'nvidia-device-plugin' | grep -v grep | awk '{ print $2 }')
-    echo "------- pid $NVP"
-    kill -9 $NVP
-    ps -aux | grep nvidia-device-plugin | grep -v grep -c
-else
-    echo "Process not found"
-fi
-
 GPU_DEST=/usr/local/nvidia
 log_file_name="/var/log/nvidia-installer-$(date +%s).log"
 KERNEL_NAME=$(uname -r)
 
-#check for existing driver version
+echo "Check for existing driver version"
 if [ -f "${GPU_DEST}/bin/nvidia-smi" ]; then
     echo "found existing nvidia-smi, checking version..."
     existing_version="$(nvidia-smi | grep "Driver Version" | cut -d' ' -f3)"
@@ -65,21 +33,54 @@ set -e
 echo "downloading driver version $GPU_DV from nvidia website"
 curl -fLS https://us.download.nvidia.com/tesla/$GPU_DV/NVIDIA-Linux-x86_64-${GPU_DV}.run -o ${GPU_DEST}/nvidia-drivers-${GPU_DV} --fail
 
+
+open_devices="$(lsof /dev/nvidia* 2>/dev/null)"
+nvidia_modprobe_active="$(systemctl is-active nvidia-modprobe)"
+nvidia_device_plugin_active="$(systemctl is-active nvidia-device-plugin)"
+
+echo "Open devices: $open_devices"
+echo "nvidia-modprobe active: $nvidia_modprobe_active" #The nvidia-modprobe utility is used by user-spaceNVIDIA driver components to make sure the NVIDIA kernel module is loaded
+echo "nvidia-device-plugin active: $nvidia_device_plugin_active" #The NVIDIA device plugin for Kubernetes
+
+if [ -n "$open_devices" ]; then
+    if [ "$nvidia_modprobe_active" == "active" ]; then
+        echo "Stopping nvidia-modprobe"
+        systemctl stop nvidia-modprobe
+    fi
+    if [ "$nvidia_device_plugin_active" == "active" ]; then
+        echo "Stopping nvidia-device-plugin"
+        systemctl stop nvidia-device-plugin
+    fi
+fi
+
+echo "Searching for nvidia device plugin processes"
+PROCMATCHES=$(ps -aux | grep nvidia-device-plugin | grep -v grep -c)
+
+if [ $PROCMATCHES == 1 ]; then
+    echo "kill it"
+    NVP=$(ps -aux | grep 'nvidia-device-plugin' | grep -v grep | awk '{ print $2 }')
+    echo "------- pid $NVP"
+    kill -9 $NVP
+    ps -aux | grep nvidia-device-plugin | grep -v grep -c
+else
+    echo "Process not found"
+fi
+
 #uninstall existing driver
 if [ -f "${GPU_DEST}/bin/nvidia-smi" ]; then
     if [ ! -z "$existing_version" ]; then
-    echo "uninstalling driver version $existing_version to install version $GPU_DV"
-    # nvidia uninstall requires kubelet to stop, throw a trap here as well as below
-    # this covers existing driver case, outside the conditionals cover new drivers
+        echo "uninstalling driver version $existing_version to install version $GPU_DV"
+        # nvidia uninstall requires kubelet to stop, throw a trap here as well as below
+        # this covers existing driver case, outside the conditionals cover new drivers
 
-    trap 'systemctl restart kubelet' EXIT SIGINT SIGTERM
-    systemctl stop kubelet
-    ${GPU_DEST}/bin/nvidia-uninstall --silent
+        trap 'systemctl restart kubelet' EXIT SIGINT SIGTERM
+        systemctl stop kubelet
+        ${GPU_DEST}/bin/nvidia-uninstall --silent
     fi
     if [ -z "$existing_version" ]; then
-    echo "found nvidia-smi but failed to extract version, continuing with driver install."
-    echo "this could lead to errors if previous module was not unloaded"
-    echo "reboot/restarting kubelet fixes it."
+        echo "found nvidia-smi but failed to extract version, continuing with driver install."
+        echo "this could lead to errors if previous module was not unloaded"
+        echo "reboot/restarting kubelet fixes it."
     fi
 fi
 

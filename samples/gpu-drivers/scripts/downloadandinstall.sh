@@ -28,6 +28,18 @@ if [ -n "$open_devices" ]; then
     fi
 fi
 
+echo "Searching for nvidia device plugin processes"
+PROCMATCHES=$(ps -aux | grep nvidia-device-plugin | grep -v grep -c)
+
+if [ $PROCMATCHES == 1 ]; then
+    echo "kill it"
+    NVP=$(ps -aux | grep 'nvidia-device-plugin' | grep -v grep | awk '{ print $2 }')
+    echo "------- pid $NVP"
+    kill -9 $NVP
+    ps -aux | grep nvidia-device-plugin | grep -v grep -c
+else
+    echo "Process not found"
+fi
 
 GPU_DEST=/usr/local/nvidia
 log_file_name="/var/log/nvidia-installer-$(date +%s).log"

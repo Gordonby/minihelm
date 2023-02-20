@@ -7,13 +7,13 @@ set -uo pipefail
 
 set -x
 
-echo "Script for NVIDIA driver install $GPU_DV"
+echo "script for NVIDIA driver install $GPU_DV"
 
 GPU_DEST=/usr/local/nvidia
 log_file_name="/var/log/nvidia-installer-$(date +%s).log"
 KERNEL_NAME=$(uname -r)
 
-echo "Check for existing driver version"
+echo "check for existing driver version"
 if [ -f "${GPU_DEST}/bin/nvidia-smi" ]; then
     echo "found existing nvidia-smi, checking version..."
     existing_version="$(nvidia-smi | grep "Driver Version" | cut -d' ' -f3)"
@@ -35,12 +35,12 @@ curl -fLS https://us.download.nvidia.com/tesla/$GPU_DV/NVIDIA-Linux-x86_64-${GPU
 
 set +e
 
-echo "Checking and closing any processes that might be using the GPU"
+echo "checking and closing any services that might be using the GPU"
 open_devices="$(lsof /dev/nvidia* 2>/dev/null)"
 nvidia_modprobe_active="$(systemctl is-active nvidia-modprobe)"
 nvidia_device_plugin_active="$(systemctl is-active nvidia-device-plugin)"
 
-echo "Open devices: $open_devices"
+echo "open devices: $open_devices"
 echo "nvidia-modprobe active: $nvidia_modprobe_active" #The nvidia-modprobe utility is used by user-spaceNVIDIA driver components to make sure the NVIDIA kernel module is loaded
 echo "nvidia-device-plugin active: $nvidia_device_plugin_active" #The NVIDIA device plugin for Kubernetes
 
@@ -63,7 +63,7 @@ echo "stopping kubelet"
 # can't reinstall drivers without forcing that closed
 systemctl stop kubelet
 
-echo "Searching for nvidia device plugin processes"
+echo "Searching for (and killing) nvidia device plugin process"
 PROCMATCHES=$(ps -aux | grep nvidia-device-plugin | grep -v grep -c)
 
 if [ $PROCMATCHES == 1 ]; then
@@ -81,6 +81,7 @@ fi
 #uninstall existing driver
 if [ -f "${GPU_DEST}/bin/nvidia-smi" ]; then
     if [ ! -z "$existing_version" ]; then
+        echo "Starting uninstall of existing driver version $existing_version"
         ${GPU_DEST}/bin/nvidia-uninstall --silent
     fi
     if [ -z "$existing_version" ]; then
@@ -90,12 +91,13 @@ if [ -f "${GPU_DEST}/bin/nvidia-smi" ]; then
     fi
 fi
 
-
-ps -aux | grep nvidia-device-plugin | grep -v grep -c
-
-echo "running installer"
+echo "running installer for version $GPU_DV"
 sh $GPU_DEST/nvidia-drivers-$GPU_DV -s -k=$KERNEL_NAME --log-file-name=${log_file_name} -a --no-drm --dkms --utility-prefix="${GPU_DEST}" --opengl-prefix="${GPU_DEST}" 2>&1
+
 nvidia-modprobe -u -c0
 ldconfig
+
+echo "starting kubelet"
 systemctl start kubelet
-echo "finished installer"
+
+echo "installation complete"
